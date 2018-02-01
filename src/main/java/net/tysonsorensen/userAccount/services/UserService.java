@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -87,8 +88,11 @@ public class UserService implements User, UserDetailsService {
         if(user.isPresent()) {
             UserEntity userEntity = user.get();
             bCryptPasswordEncoder.matches("goat", userEntity.getPassword());
-            return new org.springframework.security.core.userdetails.User(userEntity.getUserName(),
-                    userEntity.getPassword(), Collections.singleton(new SimpleGrantedAuthority("admin")));
+            Set<RoleEntity> userRoles = userEntity.getRoles();
+            String[] roles = userRoles.stream().map(RoleEntity::getRoleName).toArray(String[]::new);
+            return org.springframework.security.core.userdetails.User.withUsername(userEntity.getUserName())
+                    .password(userEntity.getPassword())
+                    .roles(roles).build();
         } else {
             throw(new UsernameNotFoundException("invalid user or password"));
         }
