@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.management.relation.Role;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -36,7 +37,7 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId")
@@ -44,12 +45,13 @@ public class UserEntity {
     private Set<RoleEntity> roles;
 
     public void addRole(final RoleEntity role) {
+        if(roles == null) {
+            roles = new HashSet<>();
+        }
         roles.add(role);
-        role.addUser(this);
     }
 
     public void removeRole(final RoleEntity role) {
         roles.add(role);
-        role.removeUser(this);
     }
 }

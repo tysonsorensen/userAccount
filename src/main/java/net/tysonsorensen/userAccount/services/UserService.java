@@ -1,9 +1,10 @@
 package net.tysonsorensen.userAccount.services;
 
 import lombok.RequiredArgsConstructor;
+import net.tysonsorensen.userAccount.data.entities.RoleEntity;
 import net.tysonsorensen.userAccount.data.entities.UserEntity;
+import net.tysonsorensen.userAccount.data.repositories.RoleRepository;
 import net.tysonsorensen.userAccount.data.repositories.UserRepository;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,9 +20,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements User, UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
+    @Transactional
     public UserEntity create(String userName, String firstName, String lastName, String email, String password) {
         validateUniqueUserName(userName);
         UserEntity userEntity = new UserEntity();
@@ -30,6 +33,10 @@ public class UserService implements User, UserDetailsService {
         userEntity.setLastName(lastName);
         userEntity.setEmail(email);
         userEntity.setPassword(bCryptPasswordEncoder.encode(password));
+        Optional<RoleEntity> roleEntity = roleRepository.findById(2);
+        Optional<RoleEntity> roleEntity2 = roleRepository.findById(1);
+        roleEntity2.ifPresent(userEntity::addRole);
+        roleEntity.ifPresent(userEntity::addRole);
         return userRepository.save(userEntity);
     }
 

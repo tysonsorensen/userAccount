@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -19,15 +18,4 @@ public class RoleEntity {
 
     @Column(name = "roleName")
     private String roleName;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<UserEntity> users;
-
-    public void addUser(final UserEntity user) {
-        users.add(user);
-    }
-
-    public void removeUser(final UserEntity user) {
-        users.remove(user);
-    }
 }
