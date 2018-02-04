@@ -4,17 +4,28 @@ import lombok.RequiredArgsConstructor;
 import net.tysonsorensen.userAccount.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import javax.validation.Valid;
+
 
 @Controller
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends WebMvcConfigurerAdapter {
     private final UserService userService;
 
-    @RequestMapping(value = "/login")
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/welcome").setViewName("welcome");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/").setViewName("index");
+    }
+
+    @GetMapping(value = "/login")
     public String login(Model model, String error, String logout) {
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
@@ -25,13 +36,22 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping(value = {"/welcome"})
-    public String welcome(Model model) {
-        return "welcome";
+    @PostMapping(value = "/createUser")
+    public String createUser(@Valid UserForm user, BindingResult result) {
+
+        if(result.hasErrors()) {
+            return "registration";
+        }
+
+        userService.create(user.getUserName(), user.getLastName(), user.getLastName(), user.getEmail(), user.getPassword());
+
+        return "forward:/login";
     }
 
-    @GetMapping(value = {"/", "/home"})
-    public String home(Model model) {
-        return "home";
+    @GetMapping("/registration")
+    public String showForm(UserForm userForm) {
+        return "registration";
     }
+
+
 }

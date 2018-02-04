@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create User</title>
+</head>
+<body>
+<p id="hello">Create User</p>
+<form th:action="@{/createUser}" th:object="${userForm}" method="post">
+    <div>
+        <label> User Name : <input type="text" th:field="*{userName}" name="userName"/> </label>
+        <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
+    </div>
+    <div>
+        <label> Password: <input type="password" th:field="*{password}" name="password"/> </label>
+        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+    </div>
+    <div>
+        <label> First Name: <input type="text" th:field="*{firstName}" name="firstName"/> </label>
+        <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+    </div>
+    <div>
+        <label> Last Name: <input type="text" th:field="*{lastName}" name="lastName"/> </label>
+        <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+    </div>
+    <div>
+        <label> Email: <input type="text" th:field="*{email}" name="email"/> </label>
+        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+    </div>
+    <div>
+        <input type="submit" value="Create User"/>
+    </div>
+</form>
+</body>
+
+</html>
