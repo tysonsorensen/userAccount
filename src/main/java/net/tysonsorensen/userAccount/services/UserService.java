@@ -26,7 +26,7 @@ public class UserService implements User, UserDetailsService {
 
     @Override
     @Transactional
-    public UserEntity create(String userName, String firstName, String lastName, String email, String password) {
+    public UserEntity create(String userName, String firstName, String lastName, String email, String password) throws UserNameInvalid {
         validateUniqueUserName(userName);
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userName);
@@ -35,51 +35,69 @@ public class UserService implements User, UserDetailsService {
         userEntity.setEmail(email);
         userEntity.setPassword(bCryptPasswordEncoder.encode(password));
         Optional<RoleEntity> roleEntity = roleRepository.findById(2);
-        Optional<RoleEntity> roleEntity2 = roleRepository.findById(1);
-        roleEntity2.ifPresent(userEntity::addRole);
         roleEntity.ifPresent(userEntity::addRole);
         return userRepository.save(userEntity);
     }
 
     @Override
     @Transactional
-    public UserEntity updateFirstName(Integer id, String newName) {
-        UserEntity userEntity = userRepository.getOne(id);
-        userEntity.setFirstName(newName);
-        return userRepository.save(userEntity);
+    public UserEntity updateFirstName(String userName, String newName) throws UserNameNotFound {
+        Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
+        if (userEntity.isPresent()) {
+            userEntity.get().setFirstName(newName);
+            return userRepository.save(userEntity.get());
+        } else {
+            throw new UserNameNotFound();
+        }
     }
 
     @Override
     @Transactional
-    public UserEntity updateUserName(Integer id, String newUserName) {
+    public UserEntity updateUserName(String userName, String newUserName) throws UserNameInvalid, UserNameNotFound {
         validateUniqueUserName(newUserName);
-        UserEntity userEntity = userRepository.getOne(id);
-        userEntity.setUserName(newUserName);
-        return userRepository.save(userEntity);
+        Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
+        if (userEntity.isPresent()) {
+            userEntity.get().setUserName(newUserName);
+            return userRepository.save(userEntity.get());
+        } else {
+            throw new UserNameNotFound();
+        }
     }
 
     @Override
     @Transactional
-    public UserEntity updateLastName(Integer id, String newName) {
-        UserEntity userEntity = userRepository.getOne(id);
-        userEntity.setLastName(newName);
-        return userRepository.save(userEntity);
+    public UserEntity updateLastName(String userName, String newName) throws UserNameNotFound {
+        Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
+        if (userEntity.isPresent()) {
+            userEntity.get().setLastName(newName);
+            return userRepository.save(userEntity.get());
+        } else {
+            throw new UserNameNotFound();
+        }
     }
 
     @Override
     @Transactional
-    public UserEntity updateEmail(Integer id, String newEmail) {
-        UserEntity userEntity = userRepository.getOne(id);
-        userEntity.setEmail(newEmail);
-        return userRepository.save(userEntity);
+    public UserEntity updateEmail(String userName, String newEmail) throws UserNameNotFound {
+        Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
+        if (userEntity.isPresent()) {
+            userEntity.get().setEmail(newEmail);
+            return userRepository.save(userEntity.get());
+        } else {
+            throw new UserNameNotFound();
+        }
     }
 
     @Override
     @Transactional
-    public UserEntity updatePassword(Integer id, String password) {
-        UserEntity userEntity = userRepository.getOne(id);
-        userEntity.setPassword(bCryptPasswordEncoder.encode(password));
-        return userRepository.save(userEntity);
+    public UserEntity updatePassword(String userName, String password) throws UserNameNotFound {
+        Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
+        if (userEntity.isPresent()) {
+            userEntity.get().setPassword(bCryptPasswordEncoder.encode(password));
+            return userRepository.save(userEntity.get());
+        } else {
+            throw new UserNameNotFound();
+        }
     }
 
     @Override
@@ -98,10 +116,16 @@ public class UserService implements User, UserDetailsService {
         }
     }
 
-    private void validateUniqueUserName(final String userName) {
+    private void validateUniqueUserName(final String userName) throws UserNameInvalid {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if(userEntity.isPresent()) {
-            throw(new RuntimeException("Invalid user name"));
+            throw(new UserNameInvalid());
         }
+    }
+
+    public class UserNameInvalid extends Exception {
+    }
+
+    public class UserNameNotFound extends Exception {
     }
 }

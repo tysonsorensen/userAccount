@@ -4,11 +4,11 @@ import net.tysonsorensen.userAccount.data.entities.UserEntity;
 
 public interface User {
 
-    UserEntity create(final String userName, final String firstName, final String lastName, final String email, final String password);
-    UserEntity updateUserName(final Integer id, final String userName);
-    UserEntity updateFirstName(final Integer id, final String newName);
-    UserEntity updateLastName(final Integer id, final String newName);
-    UserEntity updateEmail(final Integer id, final String newEmail);
-    UserEntity updatePassword(final Integer id, final String password);
+    UserEntity create(final String userName, final String firstName, final String lastName, final String email, final String password) throws UserService.UserNameInvalid;
+    UserEntity updateUserName(final String userNamed, final String userName) throws UserService.UserNameInvalid, UserService.UserNameNotFound;
+    UserEntity updateFirstName(final String userName, final String newName) throws UserService.UserNameNotFound;
+    UserEntity updateLastName(final String userName, final String newName) throws UserService.UserNameNotFound;
+    UserEntity updateEmail(final String userName, final String newEmail) throws UserService.UserNameNotFound;
+    UserEntity updatePassword(final String userName, final String password) throws UserService.UserNameNotFound;
 
 }

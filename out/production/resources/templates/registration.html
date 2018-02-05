@@ -5,35 +5,43 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Create User</title>
 </head>
 <body>
-<p id="hello">Create User</p>
-<form th:action="@{/createUser}" th:object="${userForm}" method="post">
-    <div>
-        <label> User Name : <input type="text" th:field="*{userName}" name="userName"/> </label>
-        <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
-    </div>
-    <div>
-        <label> Password: <input type="password" th:field="*{password}" name="password"/> </label>
-        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-    </div>
-    <div>
-        <label> First Name: <input type="text" th:field="*{firstName}" name="firstName"/> </label>
-        <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
-    </div>
-    <div>
-        <label> Last Name: <input type="text" th:field="*{lastName}" name="lastName"/> </label>
-        <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
-    </div>
-    <div>
-        <label> Email: <input type="text" th:field="*{email}" name="email"/> </label>
-        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-    </div>
-    <div>
-        <input type="submit" value="Create User"/>
-    </div>
-</form>
+<div class="container col-md-6 col-md-offset-3">
+    <h3 class="mt-4">Create User</h3>
+    <form th:action="@{/createUser}" th:object="${userForm}" method="post">
+        <div class="form-group">
+            <label for="username"> User Name:</label>
+            <input id="username" class="form-control" type="text" th:field="*{userName}" name="userName"/>
+            <span class="text-danger font-italic" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+        </div>
+        <div class="form-group">
+            <label for="password"> Password:</label>
+            <input id="password" class="form-control" type="password" th:field="*{password}" name="password"/>
+            <span class="text-danger font-italic" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+        <div class="form-group">
+            <label for="firstname"> First Name:</label>
+            <input id="firstname" class="form-control" type="text" th:field="*{firstName}" name="firstName"/>
+            <span class="text-danger font-italic" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+        </div>
+        <div class="form-group">
+            <label for="lastname"> Last Name:</label>
+            <input id="lastname" class="form-control" type="text" th:field="*{lastName}" name="lastName"/>
+            <span class="text-danger font-italic" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+        </div>
+        <div class="form-group">
+            <label for="email"> Email:</label>
+            <input id="email" class="form-control" type="text" th:field="*{email}" name="email"/>
+            <span class="text-danger font-italic" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary form-control" type="submit" value="Create User"/>
+        </div>
+    </form>
+</div>
 </body>
 
 </html>

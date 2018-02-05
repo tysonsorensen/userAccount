@@ -5,6 +5,8 @@ import net.tysonsorensen.userAccount.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -23,6 +25,7 @@ public class UserController extends WebMvcConfigurerAdapter {
         registry.addViewController("/welcome").setViewName("welcome");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/").setViewName("index");
+        registry.addViewController("/admin").setViewName("admin");
     }
 
     @GetMapping(value = "/login")
@@ -38,14 +41,17 @@ public class UserController extends WebMvcConfigurerAdapter {
 
     @PostMapping(value = "/createUser")
     public String createUser(@Valid UserForm user, BindingResult result) {
+        try {
+            userService.create(user.getUserName(), user.getLastName(), user.getLastName(), user.getEmail(), user.getPassword());
+        } catch (UserService.UserNameInvalid userNameInvalid) {
+            result.addError(new FieldError("UserForm", "userName", "user name already taken"));
+        }
 
         if(result.hasErrors()) {
             return "registration";
         }
 
-        userService.create(user.getUserName(), user.getLastName(), user.getLastName(), user.getEmail(), user.getPassword());
-
-        return "forward:/login";
+        return "login";
     }
 
     @GetMapping("/registration")

@@ -5,10 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Welcome</title>
 </head>
 <body>
-<p id="hello">Welcome</p>
+<div class="container col-md-6 col-md-offset-3">
+    <h3 class="mt-4">Welcome</h3>
+    <form th:action="@{/logout}" method="post">
+        <input class="btn btn-primary form-control mt-4" type="submit" value="Sign Out"/>
+    </form>
+</div>
 </body>
 
 </html>
