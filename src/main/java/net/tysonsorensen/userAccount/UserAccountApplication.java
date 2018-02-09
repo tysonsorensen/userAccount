@@ -10,4 +10,5 @@ public class UserAccountApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UserAccountApplication.class, args);
 	}
+
 }

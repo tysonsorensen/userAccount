@@ -2,11 +2,13 @@ package net.tysonsorensen.userAccount.rest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserForm {
 
     @NotBlank(message = "{userName.blank}")

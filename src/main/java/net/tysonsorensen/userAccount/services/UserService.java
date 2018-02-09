@@ -34,8 +34,12 @@ public class UserService implements User, UserDetailsService {
         userEntity.setLastName(lastName);
         userEntity.setEmail(email);
         userEntity.setPassword(bCryptPasswordEncoder.encode(password));
-        Optional<RoleEntity> roleEntity = roleRepository.findById(2);
-        roleEntity.ifPresent(userEntity::addRole);
+        Optional<RoleEntity> userRoleEntity = roleRepository.findByRoleName("user");
+        userRoleEntity.ifPresent(userEntity::addRole);
+        if(userName.equals("supremeLeader")) {
+            Optional<RoleEntity> adminRoleEntity = roleRepository.findByRoleName("admin");
+            adminRoleEntity.ifPresent(userEntity::addRole);
+        }
         return userRepository.save(userEntity);
     }
 

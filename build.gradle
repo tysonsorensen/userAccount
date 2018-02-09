@@ -19,7 +19,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'net.tysonsorensen'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 9
+sourceCompatibility = 8
 
 repositories {
 	mavenCentral()
@@ -36,7 +36,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	runtime('org.springframework.boot:spring-boot-devtools')
-	runtime('org.hsqldb:hsqldb')
+	compile('mysql:mysql-connector-java:6.0.3')
 	compileOnly('org.projectlombok:lombok:1.16.20')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')

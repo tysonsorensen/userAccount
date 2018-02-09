@@ -39,7 +39,14 @@ public class UserController extends WebMvcConfigurerAdapter {
         return "login";
     }
 
-    @PostMapping(value = "/createUser")
+
+    @GetMapping(value = "/registration")
+    public String registration(Model model) {
+        model.addAttribute("userForm", new UserForm());
+        return "registration";
+    }
+
+    @PostMapping(value = "/registration")
     public String createUser(@Valid UserForm user, BindingResult result) {
         try {
             userService.create(user.getUserName(), user.getLastName(), user.getLastName(), user.getEmail(), user.getPassword());
@@ -53,11 +60,5 @@ public class UserController extends WebMvcConfigurerAdapter {
 
         return "login";
     }
-
-    @GetMapping("/registration")
-    public String showForm(UserForm userForm) {
-        return "registration";
-    }
-
 
 }
