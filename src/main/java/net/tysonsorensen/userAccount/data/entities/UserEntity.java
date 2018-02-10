@@ -22,7 +22,7 @@ public class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "userName")
+    @Column(name = "userName", unique = true)
     private String userName;
 
     @Column(name = "fistName")
@@ -48,10 +48,6 @@ public class UserEntity {
         if(roles == null) {
             roles = new HashSet<>();
         }
-        roles.add(role);
-    }
-
-    public void removeRole(final RoleEntity role) {
         roles.add(role);
     }
 }
