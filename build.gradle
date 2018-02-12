@@ -27,7 +27,6 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
-
 dependencies {
     compile('javax.xml.bind:jaxb-api:2.3.0')
 	compile('org.springframework.boot:spring-boot-starter-actuator')

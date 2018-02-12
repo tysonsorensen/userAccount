@@ -1,4 +1,4 @@
-package net.tysonsorensen.userAccount.rest;
+package net.tysonsorensen.userAccount.web.helpers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

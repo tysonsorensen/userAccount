@@ -5,7 +5,6 @@ import net.tysonsorensen.userAccount.data.entities.RoleEntity;
 import net.tysonsorensen.userAccount.data.entities.UserEntity;
 import net.tysonsorensen.userAccount.data.repositories.RoleRepository;
 import net.tysonsorensen.userAccount.data.repositories.UserRepository;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -40,7 +38,8 @@ public class UserService implements User, UserDetailsService {
             Optional<RoleEntity> adminRoleEntity = roleRepository.findByRoleName("admin");
             adminRoleEntity.ifPresent(userEntity::addRole);
         }
-        return userRepository.save(userEntity);
+        userRepository.save(userEntity);
+        return userEntity;
     }
 
     @Override
@@ -49,7 +48,8 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if (userEntity.isPresent()) {
             userEntity.get().setFirstName(newName);
-            return userRepository.save(userEntity.get());
+            userRepository.save(userEntity.get());
+            return userEntity.get();
         } else {
             throw new UserNameNotFound();
         }
@@ -62,7 +62,8 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if (userEntity.isPresent()) {
             userEntity.get().setUserName(newUserName);
-            return userRepository.save(userEntity.get());
+            userRepository.save(userEntity.get());
+            return userEntity.get();
         } else {
             throw new UserNameNotFound();
         }
@@ -74,7 +75,8 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if (userEntity.isPresent()) {
             userEntity.get().setLastName(newName);
-            return userRepository.save(userEntity.get());
+            userRepository.save(userEntity.get());
+            return userEntity.get();
         } else {
             throw new UserNameNotFound();
         }
@@ -86,7 +88,8 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if (userEntity.isPresent()) {
             userEntity.get().setEmail(newEmail);
-            return userRepository.save(userEntity.get());
+            userRepository.save(userEntity.get());
+            return userEntity.get();
         } else {
             throw new UserNameNotFound();
         }
@@ -98,7 +101,8 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> userEntity = userRepository.findByUserName(userName);
         if (userEntity.isPresent()) {
             userEntity.get().setPassword(bCryptPasswordEncoder.encode(password));
-            return userRepository.save(userEntity.get());
+            userRepository.save(userEntity.get());
+            return userEntity.get();
         } else {
             throw new UserNameNotFound();
         }
@@ -109,7 +113,6 @@ public class UserService implements User, UserDetailsService {
         Optional<UserEntity> user = userRepository.findByUserName(username);
         if(user.isPresent()) {
             UserEntity userEntity = user.get();
-            bCryptPasswordEncoder.matches("goat", userEntity.getPassword());
             Set<RoleEntity> userRoles = userEntity.getRoles();
             String[] roles = userRoles.stream().map(RoleEntity::getRoleName).toArray(String[]::new);
             return org.springframework.security.core.userdetails.User.withUsername(userEntity.getUserName())
